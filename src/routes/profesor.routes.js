@@ -4,7 +4,7 @@ const profesorSchema = require('../models/profesorModels');
 
 /* Ruta para crear un profesor*/
 profesor_route.post('/profesor', (req, res) => {
-  const profesor = profesor(req.body);
+  const profesor = profesorSchema(req.body);
   profesor
     .save()
     .then((data) => res.json({ message: data }))
@@ -31,16 +31,9 @@ profesor_route.get('/:profesorId', (req, res) => {
 /* Ruta para editar un profesor especifico*/
 profesor_route.put('/:profesorId', (req, res) => {
   const { profesorId } = req.params;
-  const {
-    client_name,
-    address = { city, code_zip, geo },
-    contact = { email, cellphone},
-  } = req.body;
+  const peopleBody = req.body;
   profesorSchema
-    .updateOne(
-      { _id: profesorId },
-      { $set: { client_name, address, contact} }
-    )
+    .updateOne({ _id: profesorId, $set: peopleBody})
     .then((data) => res.json({ message: data }))
     .catch((error) => res.json({ message: error }));
 });
